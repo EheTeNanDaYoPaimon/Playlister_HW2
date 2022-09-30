@@ -36,7 +36,9 @@ class App extends React.Component {
         this.state = {
             listKeyPairMarkedForDeletion : null,
             currentList : null,
-            sessionData : loadedSessionData
+            sessionData : loadedSessionData,
+            SongKeyPairMarkedForDeletion : null,
+            SongKeyPairMarkedForEdition : null
         }
     }
     sortKeyNamePairsByName = (keyNamePairs) => {
@@ -274,6 +276,65 @@ class App extends React.Component {
         let modal = document.getElementById("delete-list-modal");
         modal.classList.remove("is-visible");
     }
+
+
+//modifications_______________________________________________________________________________________
+//modifications_______________________________________________________________________________________
+//modifications_______________________________________________________________________________________
+    createNewSong = (title, artist, id, index) => {
+        let newSong = {title: title, artist : artist, youtubeID : id};
+        let list = this.state.currentList;
+        if(list !== null){
+            if(index === list.songs.length){
+                list.songs.push(newSong);
+            }
+            else{
+                newList.songs.splice(index,0,newSong);
+            }
+        }
+        this.setState(prevState => ({currentList: list}), () =>{
+            this.db.mutationUpdateList(this.state.currentList);
+            this.db.mutationUpdateSessionData(this.state.sessionData);
+
+        })
+    }
+
+    deleteSong = (id) =>{
+        let list = this.state.currentList;
+        list.songs.splice(id,1);
+        this.setState(prevState => ({
+            SongKeyPairMarkedForDeletion: null,
+            currentList: list
+        }), () =>{
+            this.db.mutationUpdateList(this.state.currentList);
+            this.db.mutationUpdateSessionData(this.state.sessionData);
+        });
+    }
+
+    editSong = (id, name, artist, youtubeID) => {
+        let list = this.state.currentList;
+        if (name !== "") {
+            newList.songs[id].title = name;
+        }
+        if (artist !== "") {
+            newList.songs[id].artist = artist;
+        }
+        if (youtubeid !== "") {
+            newList.songs[id].youTubeId = youtubeid;
+        }
+        this.setState(prevState => ({
+            SongKeyPairMarkedForEdition: null,
+            currentList: list
+        }), () =>{
+            this.db.mutationUpdateList(this.state.currentList);
+            this.db.mutationUpdateSessionData(this.state.sessionData);
+        });
+        
+
+    }
+
+
+
     render() {
         let canAddSong = this.state.currentList !== null;
         let canUndo = this.tps.hasTransactionToUndo();
