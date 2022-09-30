@@ -20,6 +20,9 @@ export default class PlaylistCards extends React.Component {
                                 key={'playlist-song-' + (index+1)}
                                 song={song}
                                 moveCallback={moveSongCallback}
+                                index={index}
+                                markSongForDeletion={markSongForDeletion}
+                                markSongForEdition={markSongForEdition}
                             />
                         ))
                     }
