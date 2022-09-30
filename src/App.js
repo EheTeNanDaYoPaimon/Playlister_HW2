@@ -18,6 +18,9 @@ import PlaylistCards from './components/PlaylistCards.js';
 import SidebarHeading from './components/SidebarHeading.js';
 import SidebarList from './components/SidebarList.js';
 import Statusbar from './components/Statusbar.js';
+import AddSong_Transaction from './transactions/AddSong_Transaction';
+import DeleteSong_Transaction from './transactions/DeleteSong_Transaction';
+import EditSong_Transaction from './transactions/EditSong_Transaction';
 
 class App extends React.Component {
     constructor(props) {
@@ -300,6 +303,17 @@ class App extends React.Component {
         })
     }
 
+    markDeleteSong = (keyPair) => {
+        this.setState ( prevState  => ({
+            SongKeyPairMarkedForDeletion : keyPair
+        }), () => {this.showDeleteSongModal();});
+    }
+
+    deleteMarkedSong = (id) => {
+        this.deleteSong(id);
+        this.hideDeleteSongModal();
+    }
+
     deleteSong = (id) =>{
         let list = this.state.currentList;
         list.songs.splice(id,1);
@@ -312,6 +326,17 @@ class App extends React.Component {
         });
     }
 
+    markEditSong = (keyPair) => {
+        this.setState ( prevState  => ({
+            SongKeyPairMarkedForEdition : keyPair
+        }), () => {this.showEditSongModal();});
+    }
+    
+    editMarkedSong = (id) => {
+        this.editSong(id);
+        this.hideEditSongModal();
+    }
+
     editSong = (id, name, artist, youtubeID) => {
         let list = this.state.currentList;
         if (name !== "") {
@@ -320,7 +345,7 @@ class App extends React.Component {
         if (artist !== "") {
             newList.songs[id].artist = artist;
         }
-        if (youtubeid !== "") {
+        if (youtubeID !== "") {
             newList.songs[id].youTubeId = youtubeid;
         }
         this.setState(prevState => ({
@@ -330,8 +355,33 @@ class App extends React.Component {
             this.db.mutationUpdateList(this.state.currentList);
             this.db.mutationUpdateSessionData(this.state.sessionData);
         });
-        
+    }
 
+    showDeleteSongModal(){
+        document.getElementById("delete-song-modal").classList.add("is-visible");
+    }
+    hideDeleteSongModal(){
+        document.getElementById("delete-song-modal").classList.remove("is-visible");
+    }
+    showEditSongModal(){
+        document.getElementById("edit-song-modal").classList.add("is-visible");
+    }
+    hideEditSongModal(){
+        document.getElementById("edit-song-modal").classList.remove("is-visible");
+    }
+    
+
+    addAddSongTransaction = (start, end) => {
+        let transaction = new AddSong_Transaction(this, start, end);
+        this.tps.addTransaction(transaction);
+    }
+    addDeleteSongTransaction = (start, end) => {
+        let transaction = new DeleteSong_Transaction(this);
+        this.tps.addTransaction(transaction);
+    }
+    addEditSongTransaction = (start, end) => {
+        let transaction = new EditSong_Transaction(this);
+        this.tps.addTransaction(transaction);
     }
 
 
@@ -341,10 +391,12 @@ class App extends React.Component {
         let canUndo = this.tps.hasTransactionToUndo();
         let canRedo = this.tps.hasTransactionToRedo();
         let canClose = this.state.currentList !== null;
+        let canAddList = this.state.currentList == null;
         return (
             <div id="root">
                 <Banner />
                 <SidebarHeading
+                    canAddList = {canAddList}
                     createNewListCallback={this.createNewList}
                 />
                 <SidebarList
@@ -373,6 +425,14 @@ class App extends React.Component {
                     hideDeleteListModalCallback={this.hideDeleteListModal}
                     deleteListCallback={this.deleteMarkedList}
                 />
+                <DeleteSongModal
+                    SongKeyPair = {this.state.SongKeyPairMarkedForDeletion}
+                    hideDeleteListModal = {this.hideDeleteListModal}
+                    //callbacks
+                    />
+
+
+
             </div>
         );
     }
