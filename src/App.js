@@ -7,9 +7,15 @@ import jsTPS, { jsTPS_Transaction } from './common/jsTPS.js';
 
 // OUR TRANSACTIONS
 import MoveSong_Transaction from './transactions/MoveSong_Transaction.js';
+import AddSong_Transaction from './transactions/AddSong_Transaction.js';
+import DeleteSong_Transaction from './transactions/DeleteSong_Transaction.js';
+import EditSong_Transaction from './transactions/EditSong_Transaction.js';
 
 // THESE REACT COMPONENTS ARE MODALS
 import DeleteListModal from './components/DeleteListModal.js';
+import DeleteSongModal from './components/DeleteSongModal.js';
+import EditSongModal from './components/EditSongModal.js';
+
 
 // THESE REACT COMPONENTS ARE IN OUR UI
 import Banner from './components/Banner.js';
@@ -18,9 +24,6 @@ import PlaylistCards from './components/PlaylistCards.js';
 import SidebarHeading from './components/SidebarHeading.js';
 import SidebarList from './components/SidebarList.js';
 import Statusbar from './components/Statusbar.js';
-import AddSong_Transaction from './transactions/AddSong_Transaction';
-import DeleteSong_Transaction from './transactions/DeleteSong_Transaction';
-import EditSong_Transaction from './transactions/EditSong_Transaction';
 
 class App extends React.Component {
     constructor(props) {
@@ -414,10 +417,14 @@ class App extends React.Component {
                     undoCallback={this.undo}
                     redoCallback={this.redo}
                     closeCallback={this.closeCurrentList}
+                    createNewSongCallback={this.addAddSongTransaction}
                 />
                 <PlaylistCards
                     currentList={this.state.currentList}
-                    moveSongCallback={this.addMoveSongTransaction} />
+                    moveSongCallback={this.addMoveSongTransaction} 
+                    markDeleteSong={this.markDeleteSong()}
+                    markEditSong={this.markEditSong()}
+                    />
                 <Statusbar 
                     currentList={this.state.currentList} />
                 <DeleteListModal
@@ -428,10 +435,12 @@ class App extends React.Component {
                 <DeleteSongModal
                     SongKeyPair = {this.state.SongKeyPairMarkedForDeletion}
                     hideDeleteListModal = {this.hideDeleteListModal}
-                    //callbacks
-                    />
-
-
+                    deleteSongCallback={this.addDeleteSongTransaction}
+                />
+                <EditSongModal
+                    hideEditSongModal = {this.hideEditSongModal}
+                    editSongCallback = {this.addEditSongTransaction}
+                />
 
             </div>
         );
