@@ -387,6 +387,24 @@ class App extends React.Component {
         this.tps.addTransaction(transaction);
     }
 
+    // z y key
+
+    componentDidMount(){
+        window.addEventListener('keydown', this.handlekeydown);
+    }
+    componentWillMount(){
+        window.removeEventListener('keydown', this.handlekeydown);
+    }
+
+    handlekeydown = (event) => {
+        if((event.metaKey || event.ctrlKey) && event.key === 'z' && this.tps.hasTransactionToUndo()){
+            this.undo();
+        }
+        if((event.metaKey || event.ctrlKey) && event.key === 'y' && this.tps.hasTransactionToRedo()){
+            this.redo();
+        }
+    }
+
 
 
     render() {
