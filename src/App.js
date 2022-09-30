@@ -3,7 +3,7 @@ import './App.css';
 
 // IMPORT DATA MANAGEMENT AND TRANSACTION STUFF
 import DBManager from './db/DBManager';
-import jsTPS from './common/jsTPS.js';
+import jsTPS, { jsTPS_Transaction } from './common/jsTPS.js';
 
 // OUR TRANSACTIONS
 import MoveSong_Transaction from './transactions/MoveSong_Transaction.js';
@@ -109,6 +109,7 @@ class App extends React.Component {
             newKeyNamePairs.splice(keyIndex, 1);
 
         // AND FROM OUR APP STATE
+        this.tps.clearAllTransactions();
         this.setState(prevState => ({
             listKeyPairMarkedForDeletion : null,
             currentList: newCurrentList,
