@@ -296,7 +296,7 @@ class App extends React.Component {
                 list.songs.push(newSong);
             }
             else{
-                newList.songs.splice(index,0,newSong);
+                list.songs.splice(index,0,newSong);
             }
         }
         this.setState(prevState => ({currentList: list}), () =>{
@@ -343,13 +343,13 @@ class App extends React.Component {
     editSong = (id, name, artist, youtubeID) => {
         let list = this.state.currentList;
         if (name !== "") {
-            newList.songs[id].title = name;
+            list.songs[id].title = name;
         }
         if (artist !== "") {
-            newList.songs[id].artist = artist;
+            list.songs[id].artist = artist;
         }
         if (youtubeID !== "") {
-            newList.songs[id].youTubeId = youtubeid;
+            list.songs[id].youTubeId = youtubeID;
         }
         this.setState(prevState => ({
             SongKeyPairMarkedForEdition: null,
@@ -409,8 +409,8 @@ class App extends React.Component {
 
     render() {
         let canAddSong = this.state.currentList !== null;
-        let canUndo = this.tps.hasTransactionToUndo();
-        let canRedo = this.tps.hasTransactionToRedo();
+        let canUndo = (this.tps.hasTransactionToUndo() && this.state.currentList !== null);
+        let canRedo = (this.tps.hasTransactionToRedo() && this.state.currentList !== null);
         let canClose = this.state.currentList !== null;
         let canAddList = this.state.currentList == null;
         return (
@@ -440,8 +440,8 @@ class App extends React.Component {
                 <PlaylistCards
                     currentList={this.state.currentList}
                     moveSongCallback={this.addMoveSongTransaction} 
-                    markDeleteSong={this.markDeleteSong()}
-                    markEditSong={this.markEditSong()}
+                    markDeleteSong={this.markDeleteSong}
+                    markEditSong={this.markEditSong}
                     />
                 <Statusbar 
                     currentList={this.state.currentList} />

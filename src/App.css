@@ -154,14 +154,37 @@ body {
 }
 
 .playlister-song, .playlister-song-dragged-to { 
-  display:flex;
-  align-items: center;
-  font-size: 24pt;
-  height:20%;
+  font-size: 32pt;
+  margin: 10px;
+  padding: 20px;
+  border-radius: 25px;
+  background-color: var( --swatch-complement );
 }
 
-input {
-  font-size:20pt;
+.playlister-song:hover{
+  cursor: pointer;
+  background-color: var( --swatch-contrast);
+  color: white;
+}
+
+.toolbar-button{
+  font-size: 36pt;
+  border-width: 1px;
+  border-color: black;  
+  border-style: solid;
+  box-shadow: 2px 4px #888888;
+  border-radius: 5px;
+}
+
+.toolbar-button-disabled{
+  font-size: 36pt;
+  border-width: 1px;
+  border-color: black;  
+  border-style: solid;
+  box-shadow: 2px 4px #888888;
+  border-radius: 5px;
+  opacity: 0.25; 
+  cursor: not-allowed;
 }
 
 
@@ -394,4 +417,9 @@ span {
   100% {
     transform: rotate(0deg);
   }
+}
+
+.inputs {
+  float : right;
+  height: 40px;
 }

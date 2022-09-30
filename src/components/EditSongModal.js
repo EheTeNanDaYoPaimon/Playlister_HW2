@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 export default class EditSongModal extends Component{
     render(){
-        const {EditSongCallBack, hideEditSongModal} = this.props;
+        const {EditSongCallBack,hideEditSongModal} = this.props;
 
         return(
             <div 
@@ -32,7 +32,7 @@ export default class EditSongModal extends Component{
                             <input type="button" 
                                 id="edit-song-cancel-button" 
                                 class="modal-button" 
-                                onClick={hideEditSongModalCallback}
+                                onClick={hideEditSongModal}
                                 value='Cancel' />
                         </div>
                     </div>
